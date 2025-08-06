@@ -1,55 +1,60 @@
-export const getPlaylists = () => JSON.parse(localStorage.getItem("playlists")) || [];
+// Get all playlists
+export const getPlaylists = () => {
+  if (typeof window === "undefined") return [];
+  return JSON.parse(localStorage.getItem("playlists")) || [];
+};
 
-export const savePlaylists = (playlists) => localStorage.setItem("playlists", JSON.stringify(playlists));
+// Save playlists to localStorage
+export const savePlaylists = (playlists) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("playlists", JSON.stringify(playlists));
+};
 
-export const createPlaylist = (name, image, songs) => {
+// Create a new playlist
+export const createPlaylist = (playlist) => {
+  if (typeof window === "undefined") return;
+
   const playlists = getPlaylists();
-  const newPlaylist = { id: Date.now().toString(), name, image, songs: songs || [] };
-  playlists.push(newPlaylist);
-  savePlaylists(playlists);
-  return newPlaylist;
-};
-
-export const getPlaylistById = (id) => getPlaylists().find((p) => p.id === id);
-
-export const updatePlaylist = (id, updatedData) => {
-  let playlists = getPlaylists();
-  playlists = playlists.map((p) => (p.id === id ? { ...p, ...updatedData } : p));
+  playlists.push({ ...playlist, id: Date.now().toString(), songs: [] });
   savePlaylists(playlists);
 };
 
-
-export const deletePlaylist = (id) => {
-  const playlists = getPlaylists().filter((p) => p.id !== id);
-  savePlaylists(playlists);
-};
-
-
-export const addSongToPlaylist = (playlistId, song) => {
+// Get a playlist by ID
+export const getPlaylistById = (id) => {
+  if (typeof window === "undefined") return null;
   const playlists = getPlaylists();
-  const updatedPlaylists = playlists.map((p) => {
-    if (p.id === playlistId) {
-      return { ...p, songs: [...p.songs, { id: Date.now().toString(), ...song }] };
-    }
-    return p;
-  });
-  savePlaylists(updatedPlaylists);
+  return playlists.find((p) => p.id === id);
 };
 
+// Update an existing playlist
+export const updatePlaylist = (id, updatedPlaylist) => {
+  if (typeof window === "undefined") return;
 
-export const deleteSongFromPlaylist = (playlistId, songId) => {
-  const playlists = getPlaylists().map((p) =>
-    p.id === playlistId ? { ...p, songs: p.songs.filter((song) => song.id !== songId) } : p
-  );
-  savePlaylists(playlists);
-};
-
-
-export const getSongById = (songId) => {
   const playlists = getPlaylists();
-  for (const playlist of playlists) {
-    const song = playlist.songs.find((s) => s.id === songId);
-    if (song) return song;
+  const index = playlists.findIndex((p) => p.id === id);
+  if (index !== -1) {
+    playlists[index] = updatedPlaylist;
+    savePlaylists(playlists);
   }
-  return null;
+};
+
+// Delete a playlist
+export const deletePlaylist = (id) => {
+  if (typeof window === "undefined") return;
+
+  const playlists = getPlaylists();
+  const updated = playlists.filter((p) => p.id !== id);
+  savePlaylists(updated);
+};
+
+// Delete a song from a playlist
+export const deleteSongFromPlaylist = (playlistId, songId) => {
+  if (typeof window === "undefined") return;
+
+  const playlists = getPlaylists();
+  const playlist = playlists.find((p) => p.id === playlistId);
+  if (playlist) {
+    playlist.songs = playlist.songs.filter((song) => song.id !== songId);
+    savePlaylists(playlists);
+  }
 };
