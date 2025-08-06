@@ -2,15 +2,21 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "@/styles/playlists.css";
-import { getPlaylists, deletePlaylist } from "@/utils/playlist";
 
 export default function Playlists() {
   const [playlists, setPlaylists] = useState([]);
   const router = useRouter();
 
-  useEffect(() => setPlaylists(getPlaylists()), []);
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      const { getPlaylists } = await import("@/utils/playlist"); // ✅ Lazy import
+      setPlaylists(getPlaylists());
+    };
+    fetchPlaylists();
+  }, []);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
+    const { deletePlaylist, getPlaylists } = await import("@/utils/playlist"); // ✅ Lazy import
     deletePlaylist(id);
     setPlaylists(getPlaylists());
   };

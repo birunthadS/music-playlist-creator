@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import "@/styles/playlists.css";
-import { getPlaylistById, deleteSongFromPlaylist } from "@/utils/playlist";
 
 export default function PlaylistDetail() {
   const { id } = useParams();
@@ -10,10 +9,15 @@ export default function PlaylistDetail() {
   const [playlist, setPlaylist] = useState(null);
 
   useEffect(() => {
-    setPlaylist(getPlaylistById(id));
+    const fetchPlaylist = async () => {
+      const { getPlaylistById } = await import("@/utils/playlist"); // ✅ Lazy import
+      setPlaylist(getPlaylistById(id));
+    };
+    fetchPlaylist();
   }, [id]);
 
-  const handleDeleteSong = (songId) => {
+  const handleDeleteSong = async (songId) => {
+    const { deleteSongFromPlaylist, getPlaylistById } = await import("@/utils/playlist"); // ✅ Lazy import
     deleteSongFromPlaylist(id, songId);
     setPlaylist(getPlaylistById(id));
   };
@@ -31,8 +35,8 @@ export default function PlaylistDetail() {
         <ul className="song-list">
           {playlist.songs.map((song) => (
             <li key={song.id}>
-              <span 
-                style={{ cursor: "pointer", color: "#4a90e2" }} 
+              <span
+                style={{ cursor: "pointer", color: "#4a90e2" }}
                 onClick={() => router.push(`/songs/${song.id}`)}
               >
                 🎵 {song.title} - {song.singer}
