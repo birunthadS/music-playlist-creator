@@ -1,0 +1,32 @@
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playlist-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.playlist-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+  padding: 10px;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.playlist-card:hover {
+  transform: scale(1.05);
+}
+
+.playlist-card img {
+  width: 100%;
+  border-radius: 5px;
+}

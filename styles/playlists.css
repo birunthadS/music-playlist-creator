@@ -1,0 +1,39 @@
+.playlists-container {
+  padding: 20px;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.playlist-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.playlist-actions button {
+  margin-right: 10px;
+}
+
+.song-list {
+  margin-top: 15px;
+  list-style: none;
+  padding: 0;
+}
+
+.song-list li {
+  background: #f1f1f1;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
